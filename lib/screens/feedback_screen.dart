@@ -6,20 +6,45 @@ class FeedbackScreen extends StatefulWidget {
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
-  double rating = 0;
+  double rating = 1.0; // Set a default rating within the valid range
   final TextEditingController feedbackController = TextEditingController();
 
   void _submitFeedback() {
+    if (feedbackController.text.isEmpty) {
+      // Show an error message or a SnackBar if the feedback is empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please provide your feedback.')),
+      );
+      return;
+    }
+
     // Logic to save feedback
     print('Rating: $rating');
     print('Feedback: ${feedbackController.text}');
+
     // Clear the form
     setState(() {
-      rating = 0;
+      rating = 1.0;
       feedbackController.clear();
     });
-    // Navigate back to home screen
-    Navigator.pop(context);
+
+    // Optionally, show a confirmation dialog before navigating back
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Thank you!'),
+        content: Text('Your feedback has been submitted.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // Close the dialog
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    ).then((_) {
+      // Navigate back to the previous screen after the dialog is closed
+      Navigator.pop(context);
+    });
   }
 
   @override
@@ -37,10 +62,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             SizedBox(height: 20),
             DropdownButton<double>(
               value: rating,
-              items: [1, 2, 3, 4, 5]
+              items: [1.0, 2.0, 3.0, 4.0, 5.0]
                   .map((e) => DropdownMenuItem<double>(
+                        value: e,
                         child: Text(e.toString()),
-                        value: e.toDouble(),
                       ))
                   .toList(),
               onChanged: (value) {

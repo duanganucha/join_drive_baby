@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:join_drive_baby/screens/map_screen.dart';
 
@@ -43,6 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _firebaseMessaging.subscribeToTopic('teachers');
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   final List<Map<String, dynamic>> users = [
     {'name': 'User 1', 'location': 'Location 1'},
     {'name': 'User 2', 'location': 'Location 2'},
@@ -61,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final headers = {
       'content-type': 'application/json',
-      'Authorization': 'key=BBpWApZC2jKnHgQXPgebdZdfubh3_m3FvhYZHYKMQKi7d6yppeTl1CedvEmCLhIqYeGZQr4Ec4GC8AgE-T0ifFY ', 
+      'Authorization':
+          'key=BBpWApZC2jKnHgQXPgebdZdfubh3_m3FvhYZHYKMQKi7d6yppeTl1CedvEmCLhIqYeGZQr4Ec4GC8AgE-T0ifFY ',
     };
 
     final response = await http.post(
@@ -91,9 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.pin_drop))],
       ),
       body: Column(
         children: [
+          Text("Latitude : xxx , Longitude : xx"),
           Expanded(
             child: ListView.builder(
               itemCount: users.length,
